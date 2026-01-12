@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <!-- Header dengan ikon dan margin bawah -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary"><i class="fas fa-user-edit mr-2"></i> Edit Data Guru: {{ guru.nama }}</h3>
+        <a href="{{ url_for('guru.guru_index') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-warning text-white">
+            <h5 class="card-title mb-0">Formulir Edit Data Guru</h5>
+        </div>
+        <div class="card-body p-4">
+            <!-- Aksi form menuju guru_edit dengan ID guru saat ini -->
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('guru.guru_edit', id=guru.id) }}">
+                
+                <!-- BAGIAN 1: DATA IDENTITAS -->
+                <h6 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">I. Data Identitas</h6>
+                
+                <div class="row">
+                    <!-- Nama -->
+                    <div class="form-group col-md-6">
+                        <label for="nama" class="form-label">Nama Lengkap & Gelar <span class="text-danger">*</span></label>
+                        <input type="text" name="nama" id="nama" required class="form-control" value="{{ guru.nama or '' }}" placeholder="Contoh: Budi Santoso, S.Pd.">
+                    </div>
+
+                    <!-- NIP -->
+                    <div class="form-group col-md-6">
+                        <label for="nip" class="form-label">NIP</label>
+                        <input type="text" name="nip" id="nip" class="form-control" value="{{ guru.nip or '' }}" placeholder="Masukkan NIP">
+                    </div>
+
+                    <!-- Tempat Lahir -->
+                    <div class="form-group col-md-6">
+                        <label for="tempat_lahir" class="form-label">Tempat Lahir <span class="text-danger">*</span></label>
+                        <input type="text" name="tempat_lahir" id="tempat_lahir" required class="form-control" value="{{ guru.tempat_lahir or '' }}" placeholder="Contoh: Jakarta">
+                    </div>
+                    
+                    <!-- Tanggal Lahir (Sumber untuk hitung Pensiun) -->
+                    <div class="form-group col-md-6">
+                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" required class="form-control" value="{{ guru.tanggal_lahir or '' }}">
+                        <small class="form-text text-info">Sisa masa kerja (pensiun 60 th) akan dihitung otomatis.</small>
+                    </div>
+
+                    <!-- Agama -->
+                    <div class="form-group col-md-6">
+                        <label for="agama" class="form-label">Agama</label>
+                        <input type="text" name="agama" id="agama" class="form-control" value="{{ guru.agama or '' }}" placeholder="Contoh: Islam">
+                    </div>
+                    
+                    <!-- Jabatan -->
+                    <div class="form-group col-md-6">
+                        <label for="jabatan" class="form-label">Jabatan</label>
+                        <input type="text" name="jabatan" id="jabatan" class="form-control" value="{{ guru.jabatan or '' }}" placeholder="Contoh: Guru Kelas">
+                    </div>
+
+                    <!-- NUPTK -->
+                    <div class="form-group col-md-6">
+                        <label for="nuptk" class="form-label">NUPTK</label>
+                        <input type="text" name="nuptk" id="nuptk" class="form-control" value="{{ guru.nuptk or '' }}" placeholder="Masukkan NUPTK">
+                    </div>
+
+                    <!-- Pendidikan Terakhir -->
+                    <div class="form-group col-md-6">
+                        <label for="pendidikan" class="form-label">Pendidikan Terakhir</label>
+                        <input type="text" name="pendidikan" id="pendidikan" class="form-control" value="{{ guru.pendidikan or '' }}" placeholder="Contoh: S1 Pendidikan Matematika">
+                    </div>
+                </div>
+                
+                <!-- BAGIAN 2: DATA SK DAN MASA KERJA (BIDANG YANG HILANG) -->
+                <h6 class="mb-3 mt-4 text-secondary border-bottom pb-2 font-weight-bold">II. Data SK dan Masa Kerja</h6>
+
+                <div class="row">
+                    <!-- SK Pertama (Sumber untuk hitung Masa Kerja Total) -->
+                    <div class="form-group col-md-6">
+                        <label for="sk_pertama" class="form-label">TMT SK Pertama</label>
+                        <!-- PENTING: Menggunakan value dari database -->
+                        <input type="date" name="sk_pertama" id="sk_pertama" class="form-control" value="{{ guru.sk_pertama or '' }}">
+                        <small class="form-text text-muted">Digunakan untuk menghitung Masa Kerja Total.</small>
+                    </div>
+
+                    <!-- SK Terakhir (Sumber untuk hitung Masa Kerja Golongan) -->
+                    <div class="form-group col-md-6">
+                        <label for="sk_terakhir" class="form-label">TMT SK Pangkat Terakhir</label>
+                        <!-- PENTING: Menggunakan value dari database -->
+                        <input type="date" name="sk_terakhir" id="sk_terakhir" class="form-control" value="{{ guru.sk_terakhir or '' }}">
+                        <small class="form-text text-muted">Digunakan untuk menghitung Masa Kerja Golongan.</small>
+                    </div>
+                </div>
+                
+                <!-- BAGIAN 3: FOTO GURU -->
+                <h6 class="mb-3 mt-4 text-secondary border-bottom pb-2 font-weight-bold">III. Foto Guru</h6>
+                
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Foto Saat Ini</label>
+                        {% if guru.foto %}
+                            <div class="mb-2">
+                                <img src="{{ url_for('static', filename='uploads_guru/' + guru.foto) }}" 
+                                     alt="Foto Guru" class="img-thumbnail" style="max-width: 150px; height: auto;">
+                            </div>
+                            <small class="text-muted">File: {{ guru.foto }}</small>
+                        {% else %}
+                            <p class="text-warning">Belum ada foto yang diunggah.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="foto" class="form-label">Ganti Foto Baru (Opsional)</label>
+                        <div class="custom-file">
+                            <input type="file" name="foto" id="foto" class="custom-file-input" accept="image/*">
+                            <label class="custom-file-label" for="foto">Pilih file...</label>
+                        </div>
+                        <small class="form-text text-muted">Akan menggantikan foto yang sudah ada.</small>
+                    </div>
+                </div>
+
+                <!-- Footer untuk Tombol Aksi -->
+                <div class="card-footer bg-light p-3 mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-warning btn-lg shadow-sm text-white">
+                        <i class="fas fa-sync-alt mr-2"></i> Perbarui Data Guru
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Script untuk menampilkan nama file yang dipilih pada input type=file (Bootstrap Custom File Input)
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('foto');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const fileName = fileInput.files.length ? fileInput.files[0].name : 'Pilih file...';
+                fileInput.nextElementSibling.innerText = fileName;
+            });
+        }
+    });
+</script>
+{% endblock %}

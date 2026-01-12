@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Data Guru</h3>
+
+        <div>
+            <a href="{{ url_for('guru.guru_tambah') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Tambah Guru
+            </a>
+
+            <a href="{{ url_for('guru.guru_import') }}" class="btn btn-success btn-sm">
+                <i class="fas fa-file-upload"></i> Import Excel
+            </a>
+
+            <button onclick="exportTableToExcel('tabelGuru', 'Data_Guru')" class="btn btn-info btn-sm">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <!-- SEARCH -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari guru berdasarkan nama, NIP, jabatan...">
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table id="tabelGuru" class="table table-bordered table-hover">
+                <thead class="text-center bg-light">
+                <tr>
+                    <th>Foto</th>
+                    <th>Nama</th>
+                    <th>NIP</th>
+                    <th>NUPTK</th>
+                    <th>TTL</th>
+                    <th>Jabatan</th>
+                    <th>MK Gol</th>
+                    <th>MK Total</th>
+                    <th>Pendidikan</th>
+                    <th width="160">Aksi</th>
+                </tr>
+                </thead>
+
+                <tbody id="dataGuru">
+                {% for g in guru %}
+                <tr>
+                    <td class="text-center">
+                        {% if g.foto %}
+                        <img src="{{ url_for('static', filename='uploads_guru/' ~ g.foto) }}" class="img-thumb">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='noimage.png') }}" class="img-thumb">
+                        {% endif %}
+                    </td>
+
+                    <td>{{ g.nama }}</td>
+                    <td>{{ g.nip }}</td>
+                    <td>{{ g.nuptk }}</td>
+                    <td>{{ g.tempat_lahir }}<br><small>{{ g.tanggal_lahir }}</small></td>
+                    <td>{{ g.jabatan }}</td>
+
+                    <td>{{ g.mk_gol_tahun }} th / {{ g.mk_gol_bulan }} bln</td>
+                    <td>{{ g.mk_total_tahun }} th / {{ g.mk_total_bulan }} bln</td>
+                    <td>{{ g.pendidikan }}</td>
+
+                    <td class="text-center">
+
+    <a href="{{ url_for('guru.guru_detail', id=g.id) }}" class="btn btn-info btn-sm">
+        <i class="fas fa-eye"></i> Detail
+    </a>
+
+    <a href="{{ url_for('guru.guru_kartu', id=g.id) }}" class="btn btn-info btn-sm">
+        <i class="fas fa-address-card"></i>
+    </a>
+
+
+
+
+
+
+
+
+    <a href="{{ url_for('guru.guru_edit', id=g.id) }}" class="btn btn-warning btn-sm">
+        <i class="fas fa-edit"></i>
+    </a>
+
+    <a onclick="return confirm('Yakin ingin menghapus?')"
+       href="{{ url_for('guru.guru_hapus', id=g.id) }}"
+       class="btn btn-danger btn-sm">
+        <i class="fas fa-trash"></i>
+    </a>
+
+</td>
+
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- STYLE -->
+<style>
+    .img-thumb {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+</style>
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    let keyword = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#dataGuru tr");
+
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? "" : "none";
+    });
+});
+</script>
+
+<!-- EXPORT TO EXCEL -->
+<script>
+function exportTableToExcel(tableID, filename = '') {
+    let table = document.getElementById(tableID);
+    let html = table.outerHTML.replace(/ /g, '%20');
+
+    filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+    let download = document.createElement('a');
+    download.href = 'data:application/vnd.ms-excel,' + html;
+    download.download = filename;
+    download.click();
+}
+</script>
+
+{% endblock %}

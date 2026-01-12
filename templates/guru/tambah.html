@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3 mt-3">
+        <div class="col-12">
+            <h1 class="h3 mb-0 text-gray-800">Tambah Data Guru Baru</h1>
+        </div>
+    </div>
+
+    <!-- PEMBERITAHUAN FLASH MESSAGES (BLOK INI DIHAPUS, MENGANDALKAN YANG ADA DI BASE.HTML) -->
+
+    <div class="card card-primary card-outline">
+        <div class="card-header">
+            <h3 class="card-title">Formulir Input Data Guru</h3>
+            <div class="card-tools">
+                <a href="{{ url_for('guru.guru_index') }}" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar Guru
+                </a>
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('guru.guru_tambah') }}">
+            <div class="card-body">
+                
+                <!-- INFORMASI DASAR -->
+                <h5 class="mb-3 text-primary border-bottom pb-2">I. Data Identitas</h5>
+                <div class="row">
+                    <!-- Nama -->
+                    <div class="form-group col-md-6">
+                        <label for="nama">Nama Lengkap & Gelar <span class="text-danger">*</span></label>
+                        <input type="text" name="nama" id="nama" required class="form-control" placeholder="Contoh: Budi Santoso, S.Pd.">
+                    </div>
+
+                    <!-- NIP -->
+                    <div class="form-group col-md-6">
+                        <label for="nip">NIP</label>
+                        <input type="text" name="nip" id="nip" class="form-control" placeholder="Masukkan NIP">
+                    </div>
+
+                    <!-- Tempat Lahir -->
+                    <div class="form-group col-md-6">
+                        <label for="tempat_lahir">Tempat Lahir <span class="text-danger">*</span></label>
+                        <input type="text" name="tempat_lahir" id="tempat_lahir" required class="form-control" placeholder="Contoh: Jakarta">
+                    </div>
+                    
+                    <!-- Tanggal Lahir (Sumber untuk hitung Pensiun) -->
+                    <div class="form-group col-md-6">
+                        <label for="tanggal_lahir">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" required class="form-control">
+                        <small class="form-text text-info">Sisa masa kerja (pensiun 60 th) akan dihitung otomatis.</small>
+                    </div>
+
+                    <!-- Agama -->
+                    <div class="form-group col-md-6">
+                        <label for="agama">Agama</label>
+                        <input type="text" name="agama" id="agama" class="form-control" placeholder="Contoh: Islam">
+                    </div>
+                    
+                    <!-- Jabatan -->
+                    <div class="form-group col-md-6">
+                        <label for="jabatan">Jabatan</label>
+                        <input type="text" name="jabatan" id="jabatan" class="form-control" placeholder="Contoh: Guru Kelas">
+                    </div>
+
+                    <!-- NUPTK -->
+                    <div class="form-group col-md-6">
+                        <label for="nuptk">NUPTK</label>
+                        <input type="text" name="nuptk" id="nuptk" class="form-control" placeholder="Masukkan NUPTK">
+                    </div>
+
+                    <!-- Pendidikan Terakhir -->
+                    <div class="form-group col-md-6">
+                        <label for="pendidikan">Pendidikan Terakhir</label>
+                        <input type="text" name="pendidikan" id="pendidikan" class="form-control" placeholder="Contoh: S1 Pendidikan Matematika">
+                    </div>
+                </div>
+                
+                <!-- DATA MASA KERJA (Tanggal Sumber) -->
+                <h5 class="mb-3 mt-4 text-primary border-bottom pb-2">II. Data SK dan Masa Kerja</h5>
+
+                <div class="row">
+                    <!-- SK Pertama (Sumber untuk hitung Masa Kerja Total) -->
+                    <div class="form-group col-md-6">
+                        <label for="sk_pertama">TMT SK Pertama</label>
+                        <input type="date" name="sk_pertama" id="sk_pertama" class="form-control">
+                        <small class="form-text text-muted">Digunakan untuk menghitung Masa Kerja Total.</small>
+                    </div>
+
+                    <!-- SK Terakhir (Sumber untuk hitung Masa Kerja Golongan) -->
+                    <div class="form-group col-md-6">
+                        <label for="sk_terakhir">TMT SK Pangkat Terakhir</label>
+                        <input type="date" name="sk_terakhir" id="sk_terakhir" class="form-control">
+                        <small class="form-text text-muted">Digunakan untuk menghitung Masa Kerja Golongan.</small>
+                    </div>
+                </div>
+                
+                <!-- Foto -->
+                <h5 class="mb-3 mt-4 text-primary border-bottom pb-2">III. Foto Guru</h5>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="foto">Foto Guru</label>
+                        <input type="file" name="foto" id="foto" accept="image/*" class="form-control-file">
+                        <small class="form-text text-muted">Maksimal 16 MB.</small>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary float-right">
+                    <i class="fas fa-save"></i> Simpan Data Guru
+                </button>
+            </div>
+            <!-- /.card-footer -->
+        </form>
+    </div>
+</div>
+{% endblock %}

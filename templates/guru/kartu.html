@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-lg" style="width: 380px; border-radius: 18px;">
+        <div class="card-body text-center">
+
+            <!-- FOTO GURU -->
+            <div style="margin-bottom: 15px;">
+                {% if guru.foto %}
+                <img src="{{ url_for('static', filename='uploads_guru/' ~ guru.foto) }}"
+                     class="foto-guru">
+                {% else %}
+                <img src="{{ url_for('static', filename='noimage.png') }}"
+                     class="foto-guru">
+                {% endif %}
+            </div>
+
+            <!-- DATA UTAMA -->
+            <h3 class="fw-bold">{{ guru.nama }}</h3>
+            <p class="text-muted" style="margin-top:-5px;">
+                {{ guru.jabatan }}
+            </p>
+
+            <hr>
+
+            <table class="table table-borderless text-start small">
+                <tr><th width="120">NIP</th><td>{{ guru.nip }}</td></tr>
+                <tr><th>NUPTK</th><td>{{ guru.nuptk }}</td></tr>
+                <tr><th>TTL</th><td>{{ guru.tempat_lahir }}, {{ guru.tanggal_lahir }}</td></tr>
+                <tr><th>Pendidikan</th><td>{{ guru.pendidikan }}</td></tr>
+            </table>
+
+            <hr>
+
+            <div class="text-center">
+                <button onclick="window.print()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-print"></i> Cetak Kartu
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- STYLE FOTO -->
+<style>
+.foto-guru {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;           /* menjaga proporsi foto */
+    border: 4px solid #007bff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+</style>
+
+{% endblock %}

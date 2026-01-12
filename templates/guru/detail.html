@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-user"></i> Detail Guru</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+                <!-- FOTO -->
+                <div class="col-md-4 text-center">
+                    {% if guru.foto %}
+                    <img src="{{ url_for('static', filename='uploads_guru/' ~ guru.foto) }}"
+                         class="rounded-circle shadow"
+                         style="width:160px; height:160px; object-fit:cover;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='noimage.png') }}"
+                         class="rounded-circle shadow"
+                         style="width:160px; height:160px; object-fit:cover;">
+                    {% endif %}
+
+                    <h4 class="mt-3 fw-bold">{{ guru.nama }}</h4>
+                    <p class="text-muted">{{ guru.jabatan }}</p>
+                </div>
+
+                <!-- DATA -->
+                <div class="col-md-8">
+
+                    <table class="table table-striped">
+                        <tr><th width="180">NIP</th><td>{{ guru.nip }}</td></tr>
+                        <tr><th>NUPTK</th><td>{{ guru.nuptk }}</td></tr>
+                        <tr><th>Tempat Lahir</th><td>{{ guru.tempat_lahir }}</td></tr>
+                        <tr><th>Tanggal Lahir</th><td>{{ guru.tanggal_lahir }}</td></tr>
+                        <tr><th>Agama</th><td>{{ guru.agama }}</td></tr>
+                    
+                        <tr><th>SK Pertama</th><td>{{ guru.sk_pertama }}</td></tr>
+                        <tr><th>SK Terakhir</th><td>{{ guru.sk_terakhir }}</td></tr>
+
+                        <tr><th>Pendidikan</th><td>{{ guru.pendidikan }}</td></tr>
+                        <tr>
+                            <th>Masa Kerja Total</th>
+                            <td>{{ masa_total[0] }} tahun {{ masa_total[1] }} bulan</td>
+                        </tr>
+                        <tr>
+                            <th>Masa Kerja Golongan</th>
+                            <td>{{ masa_golongan[0] }} tahun {{ masa_golongan[1] }} bulan</td>
+                        </tr>
+                        <tr>
+                            <th>Sisa Masa Kerja</th>
+                            <td>{{ sisa[0] }} tahun {{ sisa[1] }} bulan</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="mt-3 text-end">
+                <a href="{{ url_for('guru.guru_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+                <a href="{{ url_for('guru.guru_edit', id=guru.id) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{{ url_for('guru.guru_kartu', id=guru.id) }}" class="btn btn-info">
+                    <i class="fas fa-id-card"></i> Kartu Guru
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

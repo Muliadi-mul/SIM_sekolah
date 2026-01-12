@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <!-- Header dengan ikon dan margin bawah -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary"><i class="fas fa-user-plus mr-2"></i> Tambah Data Siswa Baru</h3>
+        <a href="{{ url_for('siswa_index') }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Formulir Input Data Siswa</h5>
+        </div>
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('siswa_tambah') }}">
+                
+                <!-- BAGIAN 1: DATA AKADEMIK & IDENTITAS -->
+                <h6 class="mb-3 text-secondary border-bottom pb-2 font-weight-bold">I. Data Akademik & Asal</h6>
+                
+                <div class="row">
+                    <!-- Nama -->
+                    <div class="form-group col-md-6">
+                        <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                        <input name="nama" id="nama" class="form-control" required placeholder="Contoh: Siti Aisyah P.">
+                    </div>
+                    
+                    <!-- Kelas -->
+                    <div class="form-group col-md-3">
+                        <label for="kelas" class="form-label">Kelas <span class="text-danger">*</span></label>
+                        <select name="kelas" id="kelas" class="form-control" required>
+                            <option value="">Pilih Kelas</option>
+                            <option>X</option>
+                            <option>XI</option>
+                            <option>XII</option>
+                        </select>
+                    </div>
+
+                    <!-- Jurusan -->
+                    <div class="form-group col-md-3">
+                        <label for="jurusan" class="form-label">Jurusan <span class="text-danger">*</span></label>
+                        <select name="jurusan" id="jurusan" class="form-control" required>
+                            <option value="">Pilih Jurusan</option>
+                            <option>NKPI</option>
+                            <option>TKJ</option>
+                            <option>AT</option>
+                            <option>ATU</option>
+                            <option>TKR</option>
+                            <option>ATPH</option>
+                        </select>
+                    </div>
+
+                    <!-- Asal Sekolah -->
+                    <div class="form-group col-md-6">
+                        <label for="asal_sekolah" class="form-label">Asal Sekolah</label>
+                        <input name="asal_sekolah" id="asal_sekolah" class="form-control" placeholder="Contoh: SMPN 1 Jakarta">
+                    </div>
+                </div>
+                
+                <!-- BAGIAN 2: DATA PRIBADI -->
+                <h6 class="mb-3 mt-4 text-secondary border-bottom pb-2 font-weight-bold">II. Data Pribadi & Kontak</h6>
+                
+                <div class="row">
+                    <!-- Tempat Lahir -->
+                    <div class="form-group col-md-6">
+                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                        <input name="tempat_lahir" id="tempat_lahir" class="form-control" placeholder="Contoh: Medan">
+                    </div>
+                    
+                    <!-- Tanggal Lahir -->
+                    <div class="form-group col-md-6">
+                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" required>
+                        <small class="form-text text-muted">Usia akan dihitung otomatis.</small>
+                    </div>
+
+                    <!-- Alamat -->
+                    <div class="form-group col-md-12">
+                        <label for="alamat" class="form-label">Alamat Lengkap</label>
+                        <textarea name="alamat" id="alamat" class="form-control" rows="3" placeholder="Masukkan alamat domisili siswa saat ini."></textarea>
+                    </div>
+                </div>
+
+                <!-- BAGIAN 3: FOTO -->
+                <h6 class="mb-3 mt-4 text-secondary border-bottom pb-2 font-weight-bold">III. Foto Siswa</h6>
+
+                <div class="form-group">
+                    <label for="foto" class="form-label">Pilih Foto Siswa (Opsional)</label>
+                    <div class="custom-file">
+                        <input type="file" name="foto" id="foto" class="custom-file-input" accept="image/*">
+                        <label class="custom-file-label" for="foto">Pilih file...</label>
+                    </div>
+                    <small class="form-text text-muted">Format: PNG, JPG/JPEG. Maksimal 16 MB.</small>
+                </div>
+                
+                <!-- Footer untuk Tombol Aksi -->
+                <div class="card-footer bg-light p-3 mt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                        <i class="fas fa-save mr-2"></i> Simpan Data Siswa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Script untuk menampilkan nama file yang dipilih pada input type=file (Bootstrap Custom File Input)
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('foto');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const fileName = fileInput.files.length ? fileInput.files[0].name : 'Pilih file...';
+                fileInput.nextElementSibling.innerText = fileName;
+            });
+        }
+    });
+</script>
+{% endblock %}

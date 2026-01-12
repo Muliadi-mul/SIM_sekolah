@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-primary">
+        <div class="inner"><h3>{{ total_siswa }}</h3><p>Total Siswa</p></div>
+        <div class="icon"><i class="fas fa-users"></i></div>
+        <a href="{{ url_for('siswa_index') }}" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-success">
+        <div class="inner"><h3>{{ total_guru }}</h3><p>Total Guru</p></div>
+        <div class="icon"><i class="fas fa-user-tie"></i></div>
+        <a href="{{ url_for('guru.guru_index') }}" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-warning">
+        <div class="inner"><h3>{{ total_kelas }}</h3><p>Total Kelas</p></div>
+        <div class="icon"><i class="fas fa-school"></i></div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <div class="small-box bg-danger">
+        <div class="inner"><h3>{{ total_jurusan }}</h3><p>Jumlah Jurusan</p></div>
+        <div class="icon"><i class="fas fa-layer-group"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h5>Statistik Siswa per Jurusan</h5></div>
+    <div class="card-body">
+      <canvas id="chartJurusan" height="80"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = {{ chart_labels|tojson }};
+  const values = {{ chart_values|tojson }};
+
+  const ctx = document.getElementById('chartJurusan').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ label: 'Jumlah Siswa', data: values, backgroundColor: '#17a2b8' }] },
+    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+  });
+</script>
+{% endblock %}
